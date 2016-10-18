@@ -201,8 +201,7 @@
 		$mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $database);
 		
 		$stmt = $mysqli->prepare("
-			SELECT id, interest
-			FROM interests
+			SELECT id, interest FROM interests
 		");
 		echo $mysqli->error;
 		
@@ -221,6 +220,45 @@
 			$i = new StdClass();
 			
 			$i->id = $id;
+			$i->interest = $interest;
+		
+			array_push($result, $i);
+		}
+		
+		$stmt->close();
+		$mysqli->close();
+		
+		return $result;
+	}
+	
+	
+	function getUserAllInterests() {
+		
+		$database = "if16_karlkruu";
+		$mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $database);
+		
+		$stmt = $mysqli->prepare("
+			SELECT interest FROM interests
+			JOIN user_interests ON interests.id=user_interests.interest_id
+			WHERE user_interests.user_id=?
+		");
+		echo $mysqli->error;
+		$stmt->bind_param("i", $_SESSION["userId"]);
+		
+		$stmt->bind_result($interest);
+		$stmt->execute();
+		
+		
+		//tekitan massiivi
+		$result = array();
+		
+		// tee seda seni, kuni on rida andmeid
+		// mis vastab select lausele
+		while ($stmt->fetch()) {
+			
+			//tekitan objekti
+			$i = new StdClass();
+			
 			$i->interest = $interest;
 		
 			array_push($result, $i);
