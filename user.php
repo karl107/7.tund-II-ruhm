@@ -6,7 +6,7 @@
 	if (!isset($_SESSION["userId"])){
 		
 		//suunan sisselogimise lehele
-		header("Location: login.php");
+		header("Location: logi.php");
 		exit();
 	}
 	
@@ -15,7 +15,7 @@
 	if (isset($_GET["logout"])) {
 		
 		session_destroy();
-		header("Location: login.php");
+		header("Location: logi.php");
 		exit();
 	}
 	
@@ -31,12 +31,24 @@
 	if ( isset($_POST["interest"]) && 
 		!empty($_POST["interest"])
 	  ) {
-		  
+		  echo $_POST["interest"];
 		saveInterest(cleanInput($_POST["interest"]));
 		
 	}
 	
+	if ( isset($_POST["userInterest"]) && 
+		!empty($_POST["userInterest"])
+	  ) {
+		  
+		saveUserInterest(cleanInput($_POST["userInterest"]));
+		
+	}
+	
     $interests = getAllInterests();
+	
+	
+	
+	
 ?>
 <h1><a href="data.php"> < tagasi</a> Kasutaja leht</h1>
 <?=$msg;?>
